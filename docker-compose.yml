@@ -4,9 +4,14 @@ services:
   app:
     build:
       context: .
+    restart: unless-stopped
     container_name: import_users_app
     image: import_users_app:0.1.0
     env_file:
       - .env
     volumes:
-      - ./import_users:/home/user/app
+      - import-data:/home/user
+
+volumes:
+  import-data:
+    driver: local
