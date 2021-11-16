@@ -32,4 +32,4 @@ RUN pip install --upgrade pip && \
 
 WORKDIR /home/user/app
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["python", "main.py"]
