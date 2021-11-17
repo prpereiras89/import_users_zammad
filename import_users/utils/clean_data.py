@@ -40,10 +40,14 @@ class CleanData:
         self.df_siga = self.df_siga[self.df_siga['cpf'].notna()]
         self.df_sigs = self.df_sigs[self.df_sigs['cpf'].notna()]
         self.df_sigaa = self.df_sigaa[self.df_sigaa['cpf'].notna()]
+
+        self.df_siga = self.df_siga.reset_index(drop=True)
+        self.df_sigs = self.df_sigs.reset_index(drop=True)
+        self.df_sigaa = self.df_sigaa.reset_index(drop=True)
         
-        self.df_siga['cpf'] = self.df_siga['cpf'].astype('str').apply(lambda s: s[0:3] + '.' + s[3:6] + '.' + s[6:9] + '-' + s[9:])
-        self.df_sigs['cpf'] = self.df_sigs['cpf'].astype('str').apply(lambda s: s[0:3] + '.' + s[3:6] + '.' + s[6:9] + '-' + s[9:])
-        self.df_sigaa['cpf'] = self.df_sigaa['cpf'].astype('str').apply(lambda s: s[0:3] + '.' + s[3:6] + '.' + s[6:9] + '-' + s[9:])
+        self.df_siga['cpf'] = self.df_siga['cpf'].astype('str').map(lambda s: s[0:3] + '.' + s[3:6] + '.' + s[6:9] + '-' + s[9:])
+        self.df_sigs['cpf'] = self.df_sigs['cpf'].astype('str').map(lambda s: s[0:3] + '.' + s[3:6] + '.' + s[6:9] + '-' + s[9:])
+        self.df_sigaa['cpf'] = self.df_sigaa['cpf'].astype('str').map(lambda s: s[0:3] + '.' + s[3:6] + '.' + s[6:9] + '-' + s[9:])
         print("\n\n[STEP 2] CLEANING DATA FINISHED")
 
         return self.df_siga, self.df_sigs, self.df_sigaa
