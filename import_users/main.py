@@ -15,7 +15,7 @@ from datetime import datetime
 REC = pytz.timezone("America/Recife")
 
 def start_import():
-    print("[STEP 1] " + datetime.now().replace(tzinfo=REC).strftime('%H:%M:%S %d-%m-%Y') + " - GETTING DATA FROM DATABASES...")
+    print("[STEP 1] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - GETTING DATA FROM DATABASES...")
     consulta_siga = ConsultaSIGA(os.getenv('SIGA_HOST'),
                         os.getenv('SIGA_PORT'),
                         os.getenv('SIGA_SERVICENAME'),
@@ -36,14 +36,14 @@ def start_import():
                             os.getenv('SIGAA_PASSWORD')).search()
     print("\n\n[STEP 1.3] DATA FROM SIGAA", df_sigaa, "\n[STEP 1] GETTING DATA FROM DATABASES FINISHED...")
 
-    df_siga, df_sigs, df_sigaa = clean_data = CleanData(df_siga, df_sigs, df_sigaa).clean_data()
+    df_siga, df_sigs, df_sigaa = CleanData(df_siga, df_sigs, df_sigaa).clean_data()
 
     DataToZammad(df_siga, df_sigs, df_sigaa, consulta_siga).import_zammad()
-    print("[STEP 4] " + datetime.now().replace(tzinfo=REC).strftime('%H:%M:%S %d-%m-%Y') + " - COMPLETE...")
+    print("[STEP 4] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - COMPLETE...")
 
 
 if __name__ == '__main__':
-    print("RUNNING SCHEDULER...\n")
+    print("RUNNING SCHEDULER...")
     scheduler = BlockingScheduler()
     trigger = OrTrigger([CronTrigger(day_of_week='mon,wed,fri', hour='20',timezone=REC)])
     scheduler.add_job(start_import, trigger)
