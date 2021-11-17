@@ -142,3 +142,4 @@ dev/
 
 *.csv
 *.xlsx
+.DS_Store
