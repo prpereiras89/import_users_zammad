@@ -43,7 +43,7 @@ def start_import():
 
 
 if __name__ == '__main__':
-    print("RUNNING SCHEDULER...\n\n\n")
+    print("RUNNING SCHEDULER...\n")
     scheduler = BlockingScheduler()
     trigger = OrTrigger([CronTrigger(day_of_week='mon,wed,fri', hour='20',timezone=REC)])
     scheduler.add_job(start_import, trigger)

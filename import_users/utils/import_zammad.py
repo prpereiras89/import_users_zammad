@@ -182,18 +182,21 @@ class DataToZammad:
 
         df_aux = pd.DataFrame()
         try:
-            df_aux = pd.read_csv("csv/users_zammad.csv", header=0, sep = ",", encoding='utf-8-sig')
+            df_aux = pd.read_csv("csv/users_zammad.csv", header=0, sep = ",", encoding='utf-8-sig', dtype={'login': 'string'})
         except Exception as e:
             print(e)
 
-        df_zammad.to_csv("csv/users_zammad.csv", header=True, sep = ",", index=False, encoding='utf-8-sig')
-
+        df_zammad.to_csv("csv/users_zammad.csv", header=True, columns=["login"], sep = ",", index=False, encoding='utf-8-sig')
+    
         if not df_aux.empty:
-            common = df_zammad.merge(df_aux, on=["cpf"])
-            df_zammad = df_zammad[~df_zammad['cpf'].isin(common['cpf'])]
+            common = df_zammad.merge(df_aux, on=["login"])
+            df_zammad = df_zammad[~df_zammad['login'].isin(common['login'])]
 
         
         print("\n\nDF_ZAMMAD\n", df_zammad)
+
+        if df_zammad.empty:
+            return
         
         print("\n[STEP 3] IMPORTING TO ZAMMAD...")
 
