@@ -2,6 +2,7 @@ import os
 import requests
 import pandas as pd
 from collections import defaultdict
+from .mongodb import save_logins, get_many_logins
 
 class DataToZammad:
     def __init__(self, df_siga, df_sigs, df_sigaa, consulta_siga):
@@ -182,15 +183,23 @@ class DataToZammad:
 
         df_aux = pd.DataFrame()
         try:
-            df_aux = pd.read_csv("csv/users_zammad.csv", header=0, sep = ",", encoding='utf-8-sig', dtype={'login': 'string'})
+            df_aux = get_many_logins()
+
         except Exception as e:
             print(e)
 
-        df_zammad.to_csv("csv/users_zammad.csv", header=True, columns=["login"], sep = ",", index=False, encoding='utf-8-sig')
-    
+        save_logins(df_zammad[['login']])
+
         if not df_aux.empty:
-            common = df_zammad.merge(df_aux, on=["login"])
-            df_zammad = df_zammad[~df_zammad['login'].isin(common['login'])]
+            
+            common = df_zammad.merge(df_aux, how = 'inner', on=["login"])
+            common = common[['id', 'login', 'firstname', 'lastname', 'email', 'web', 'phone', 'fax',
+                             'mobile', 'department', 'street', 'zip', 'city', 'country', 'address',
+                             'vip', 'verified', 'active', 'note', 'last_login', 'out_of_office',
+                             'out_of_office_start_at', 'out_of_office_end_at', 'cpf', 'lotacao',
+                             'roles', 'karma_user', 'cargo', 'funcao', 'categoria', 'exercicio',
+                             'curso', 'organization', 'name']]
+            df_zammad = pd.concat([df_zammad,common]).drop_duplicates(keep=False)
 
         
         print("\n\nDF_ZAMMAD\n", df_zammad)

@@ -1,1 +1,0 @@
-this folder serves as cache for the last import data.
