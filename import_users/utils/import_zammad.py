@@ -2,7 +2,7 @@ import os
 import requests
 import pandas as pd
 from collections import defaultdict
-from .mongodb import save_logins, get_many_logins
+from .mongodb import save_login, save_logins, get_many_logins
 
 class DataToZammad:
     def __init__(self, df_siga, df_sigs, df_sigaa, consulta_siga):
@@ -188,7 +188,7 @@ class DataToZammad:
         except Exception as e:
             print(e)
 
-        save_logins(df_zammad[['login']])
+        #save_logins(df_zammad[['login']])
 
         if not df_aux.empty:
             
@@ -255,6 +255,10 @@ class DataToZammad:
 
 
                 print("[" + str(i) + "] - RESPONSE:" + str(response) + " Name: " + df_zammad['name'].iloc[i])
+                if 'error' in str(response):
+                    print("Error fetching ticket by id!")
+                    
+                save_login(df_zammad['login'].iloc[i])
 
             except Exception as e:
                 print("exception: " + str(i), e)

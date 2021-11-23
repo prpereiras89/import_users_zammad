@@ -42,6 +42,10 @@ def save_logins(df):
 
     print('Finalizado atualização do MongoDB...')
 
+def save_login(login):
+    db = _db_connection()
+    my_collection = db['login_users']
+    my_collection.update({"login": login}, {"login": login}, upsert=True)
 
 def get_many_logins(query=None):
     db = _db_connection()
