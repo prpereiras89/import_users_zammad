@@ -5,7 +5,7 @@ import pandas as pd
 class ConsultaSIGS:
     
     query = '''select CAST (p.cpf_cnpj AS VARCHAR(11)) as "CPF", p.nome as "NOME", p.email as "EMAIL SERVIDOR", u.email as "EMAIL USUÁRIO", 
-            c.denominacao "CARGO", case when d.id_designacao is null then \'--\' else a.descricao end, u2.nome "EXERCÍCIO", 
+            c.denominacao "CARGO", case when d.id_designacao is null or d.fim is not null then \'--\' else a.descricao end, u2.nome "EXERCÍCIO", 
             u3.nome "LOTAÇÃO", c2.descricao as "CATEGORIA" from RH.servidor s left join comum.pessoa p on 
             p.id_pessoa = s.id_pessoa left join rh.categoria c2 on c2.id_categoria = s.id_categoria left join comum.unidade u2 on 
             u2.id_unidade = s.id_unidade left join comum.unidade u3 on u3.id_unidade = s.id_unidade_lotacao left join 

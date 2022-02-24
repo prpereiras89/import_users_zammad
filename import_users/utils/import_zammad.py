@@ -3,6 +3,10 @@ import requests
 import pandas as pd
 from collections import defaultdict
 from .mongodb import save_login, save_logins, get_many_logins
+from datetime import datetime
+import pytz
+
+REC = pytz.timezone("America/Recife")
 
 class DataToZammad:
     def __init__(self, df_siga, df_sigs, df_sigaa, consulta_siga):
@@ -12,7 +16,7 @@ class DataToZammad:
         self.consulta_siga = consulta_siga
 
     def import_zammad(self):
-        print("\n[STEP 3] IMPORTING TO ZAMMAD...")
+        print("\n[STEP 3] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - IMPORTING TO ZAMMAD...")
         csv_columns = ["id","login","firstname","lastname","email","web","phone","fax","mobile","department",
                        "street","zip","city","country","address","vip","verified","active","note","last_login",
                        "out_of_office","out_of_office_start_at","out_of_office_end_at","cpf","lotacao","roles",
@@ -23,7 +27,7 @@ class DataToZammad:
         for i in csv_columns:
             aux_dict[i] = []
 
-        print("[SIG@] LOADING...\n")
+        print("[SIG@] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - LOADING...\n")
         for i in range(0, len(self.df_siga['cpf'])):
             if self.df_siga['cpf'].iloc[i] not in aux_dict['cpf']:
                 if isinstance(self.df_siga['email_institucional'].iloc[i], str):
@@ -60,7 +64,7 @@ class DataToZammad:
 
 
 
-        print("[SIGAA] LOADING...\n")
+        print("[SIGAA] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - LOADING...\n")
         for i in range(0, len(self.df_sigaa['cpf'])):
             if "CODAI" in str(self.df_sigaa['unidade'].iloc[i]) and self.df_sigaa['cpf'].iloc[i] not in aux_dict['cpf']:
                 aux_dict['login'].append(str(self.df_sigaa['email'].iloc[i]).lower())
@@ -95,7 +99,7 @@ class DataToZammad:
                 
 
 
-        print("[SIGS] BUILDING QUERY...\n")
+        print("[SIGS] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - BUILDING QUERY...\n")
         aux_servidor = []
         for i in range(0, len(self.df_sigs['cpf'])):
             
@@ -121,7 +125,7 @@ class DataToZammad:
 
         self.df_sigs = pd.merge(self.df_sigs, servidor, on='cpf')
 
-        print("[SIGS] LOADING...\n")
+        print("[SIGS] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - LOADING...\n")
         for i in range(0, len(self.df_sigs['cpf'])):
             if self.df_sigs['cpf'].iloc[i] in aux_dict['cpf']:
                 index = aux_dict['cpf'].index(self.df_sigs['cpf'].iloc[i])
@@ -207,7 +211,7 @@ class DataToZammad:
         if df_zammad.empty:
             return
         
-        print("\n[STEP 3] IMPORTING TO ZAMMAD...")
+        print("\n[STEP 3] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - IMPORTING TO ZAMMAD...")
 
         # SERVIÇOS
         access_token = os.getenv("TOKEN_ZAMMAD")

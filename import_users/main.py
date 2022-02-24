@@ -22,19 +22,19 @@ def start_import():
                         os.getenv('SIGA_USER'),
                         os.getenv('SIGA_PASSWORD'))
     df_siga = consulta_siga.search()
-    print("[STEP 1.1] DATA FROM SIG@", df_siga)
+    print("[STEP 1.1] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - DATA FROM SIG@", df_siga)
 
     df_sigs = ConsultaSIGS(os.getenv('SIGS_HOST'),
                         os.getenv('SIGS_DATABASE'),
                         os.getenv('SIGS_USER'),
                         os.getenv('SIGS_PASSWORD')).search()
-    print("\n\n[STEP 1.2] DATA FROM SIGs", df_sigs)
+    print("\n\n[STEP 1.2] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - DATA FROM SIGs", df_sigs)
     
     df_sigaa = ConsultaSIGAA(os.getenv('SIGAA_HOST'),
                             os.getenv('SIGAA_DATABASE'),
                             os.getenv('SIGAA_USER'),
                             os.getenv('SIGAA_PASSWORD')).search()
-    print("\n\n[STEP 1.3] DATA FROM SIGAA", df_sigaa, "\n[STEP 1] GETTING DATA FROM DATABASES FINISHED...")
+    print("\n\n[STEP 1.3] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - DATA FROM SIGAA", df_sigaa, "\n[STEP 1] GETTING DATA FROM DATABASES FINISHED...")
 
     df_siga, df_sigs, df_sigaa = CleanData(df_siga, df_sigs, df_sigaa).clean_data()
 

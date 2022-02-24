@@ -1,4 +1,8 @@
 import pandas as pd
+from datetime import datetime
+import pytz
+
+REC = pytz.timezone("America/Recife")
 
 class CleanData:
     def __init__(self, df_siga, df_sigs, df_sigaa):
@@ -7,7 +11,7 @@ class CleanData:
         self.df_sigaa = df_sigaa
 
     def clean_data(self):
-        print("\n[STEP 2] CLEANING DATA...")
+        print("\n[STEP 2] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - CLEANING DATA...")
         self.df_siga.columns = ['cpf','nome','email_institucional','programa_formacao','orgao']
         self.df_sigs.columns = ['cpf', 'nome', 'email_p0', 'email_p1','cargo','descricao','exercicio','lotacao','categoria']
         self.df_sigaa.columns = ['cpf', 'nome', 'email', 'curso','unidade']
@@ -48,6 +52,6 @@ class CleanData:
         self.df_siga['cpf'] = self.df_siga['cpf'].astype('str').map(lambda s: s[0:3] + '.' + s[3:6] + '.' + s[6:9] + '-' + s[9:])
         self.df_sigs['cpf'] = self.df_sigs['cpf'].astype('str').map(lambda s: s[0:3] + '.' + s[3:6] + '.' + s[6:9] + '-' + s[9:])
         self.df_sigaa['cpf'] = self.df_sigaa['cpf'].astype('str').map(lambda s: s[0:3] + '.' + s[3:6] + '.' + s[6:9] + '-' + s[9:])
-        print("\n\n[STEP 2] CLEANING DATA FINISHED")
+        print("\n\n[STEP 2] " + datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y') + " - CLEANING DATA FINISHED")
 
         return self.df_siga, self.df_sigs, self.df_sigaa

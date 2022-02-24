@@ -4,6 +4,9 @@ import pymongo
 from pymongo import MongoClient
 import os
 from datetime import datetime
+import pytz
+
+REC = pytz.timezone("America/Recife")
 
 def _db_connection():
     client = MongoClient("mongodb://" + os.getenv("MONGODB_HOST")   + ":" + os.getenv('MONGODB_PORT') + "/",
@@ -21,11 +24,11 @@ def save_logins(df):
     df_banco = get_many_logins({"login": {"$in": login}})
 
     if df_banco.empty:
-        print("Inserindo logins...")
+        print(datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y'), " [DB EMPTY] Inserindo logins...")
         df.reset_index(inplace=True)
         data_dict = df.to_dict("records")
         my_collection.insert_many(data_dict)
-        print("Finalizado...")
+        print(datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y'), " [DB EMPTY] Finalizado...")
         return
 
     common = df.merge(df_banco, how = 'inner', on=["login"])
@@ -33,14 +36,14 @@ def save_logins(df):
     df_result = pd.concat([df,common]).drop_duplicates(keep=False)
             
     if not df_result.empty:
-        print("Inserindo novos logins...")
+        print(datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y'), " Inserindo novos logins...")
         df_result.reset_index(drop=True, inplace=True)
         data_dict = df_result.to_dict("records")
         my_collection.insert_many(data_dict)
     else:
         print("Nenhum novo login!")
 
-    print('Finalizado atualização do MongoDB...')
+    print(datetime.now(REC).strftime('%H:%M:%S %d-%m-%Y'), ' Finalizado atualização do MongoDB...')
 
 def save_login(login):
     db = _db_connection()
