@@ -17,10 +17,10 @@ RUN python -m venv /home/user/venv && \
     wget --quiet -O /tmp/instantclient-basiclite-linuxx64.zip https://download.oracle.com/otn_software/linux/instantclient/instantclient-basiclite-linuxx64.zip && \
     mkdir -p /home/user/driver/oracle_ctl/ && \
     unzip /tmp/instantclient-basiclite-linuxx64.zip -d /home/user/driver/oracle_ctl/ && \
-    ln -s /home/user/driver/oracle_ctl/instantclient_21_4/libclntsh.so.11.1 libclntsh.so && \
+    ln -s /home/user/driver/oracle_ctl/instantclient_21_5/libclntsh.so.11.1 libclntsh.so && \
     chown -R user:user /home/user
 
-ENV LD_LIBRARY_PATH="/home/user/driver/oracle_ctl/instantclient_21_4:$LD_LIBRARY_PATH"
+ENV LD_LIBRARY_PATH="/home/user/driver/oracle_ctl/instantclient_21_5:$LD_LIBRARY_PATH"
     
 USER user
 
